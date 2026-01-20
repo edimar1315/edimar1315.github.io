@@ -1,147 +1,172 @@
 // Configuração: destaques definidos conforme sua lista.
-// Destaques atuais (máx 3): NossoSorteio, HospitalApp, APIIntegracaoReceita
-// Se quiser trocar algum destaque, altere a ordem ou substitua o objeto correspondente.
 const featuredConfig = [
-  { owner: "edimar1315", name: "NossoSorteio", title: "NossoSorteio" },
-  { owner: "edimar1315", name: "HospitalApp", title: "HospitalApp" },
-  { owner: "edimar1315", name: "APIIntegracaoReceita", title: "APIIntegracaoReceita" },
+  { 
+    owner: "edimar1315", 
+    name: "NossoSorteio", 
+    title: "NossoSorteio",
+    tags: ["C#", ".NET", "SQL Server"]
+  },
+  { 
+    owner: "edimar1315", 
+    name: "HospitalApp", 
+    title: "HospitalApp",
+    tags: ["ASP.NET Core", "Entity Framework"]
+  },
+  { 
+    owner: "edimar1315", 
+    name: "APIIntegracaoReceita", 
+    title: "API Receita Federal",
+    tags: ["API REST", "Python", "Automation"]
+  },
 ];
 
-const username = "edimar1315"; // usado para carregar lista geral
+const username = "edimar1315";
 const reposEl = document.getElementById("repos");
 const featuredEl = document.getElementById("featured");
 const avatarEl = document.getElementById("avatar");
-const nameEl = document.getElementById("name");
-const bioEl = document.getElementById("bio");
-const githubLinkEl = document.getElementById("github-link");
+
+// Cores para linguagens
+const langColors = {
+  "JavaScript": "#f1e05a",
+  "TypeScript": "#2b7489",
+  "Python": "#3572A5",
+  "HTML": "#e34c26",
+  "CSS": "#563d7c",
+  "Shell": "#89e051",
+  "Go": "#00ADD8",
+  "C#": "#178600",
+  "C++": "#f34b7d",
+  "Java": "#b07219",
+  "PowerShell": "#012456"
+};
+
+function getLangColor(name) {
+  return langColors[name] || "#6b7280";
+}
 
 async function fetchProfile() {
-  const res = await fetch(`https://api.github.com/users/${username}`);
-  if (!res.ok) throw new Error("Não foi possível obter perfil");
-  return res.json();
+  try {
+    const res = await fetch(`https://api.github.com/users/${username}`);
+    if (!res.ok) throw new Error("Erro ao carregar perfil");
+    const data = await res.json();
+    
+    if (avatarEl) {
+      avatarEl.src = data.avatar_url;
+    }
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function fetchRepos() {
-  const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
-  if (!res.ok) throw new Error("Não foi possível obter repositórios");
-  return res.json();
+  try {
+    const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+    if (!res.ok) throw new Error("Erro ao carregar repositórios");
+    return await res.json();
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
 }
 
 function formatDate(iso) {
   const d = new Date(iso);
-  return d.toLocaleDateString();
+  return d.toLocaleDateString('pt-BR');
 }
 
-function langColor(name){
-  const map = {
-    "JavaScript":"#f1e05a",
-    "TypeScript":"#2b7489",
-    "Python":"#3572A5",
-    "HTML":"#e34c26",
-    "CSS":"#563d7c",
-    "Shell":"#89e051",
-    "Go":"#00ADD8",
-    "": "#6b7280"
-  };
-  return map[name] || "#6b7280";
+function createCardHTML(repo, config = {}) {
+  const title = config.title || repo.name;
+  const desc = config.descriptionOverride || repo.description || "Sem descrição definida.";
+  const url = repo.html_url;
+  const stars = repo.stargazers_count;
+  const lang = repo.language;
+  
+  // Tags: Use config tags if available, otherwise just the main language
+  let tagsHTML = '';
+  if (config.tags && config.tags.length) {
+    tagsHTML = `<div class="tags" style="margin-top:auto; margin-bottom:16px;">
+      ${config.tags.map(t => `<span>${t}</span>`).join('')}
+    </div>`;
+  }
+
+  return `
+    <h3><a href="${url}" target="_blank">${title}</a></h3>
+    <p>${desc}</p>
+    ${tagsHTML}
+    <div class="meta">
+      ${lang ? `<span><span class="lang-dot" style="background:${getLangColor(lang)}"></span>${lang}</span>` : ""}
+      <span>★ ${stars}</span>
+      <span>Atualizado: ${formatDate(repo.updated_at)}</span>
+    </div>
+  `;
 }
 
 function renderFeatured(reposByFullName) {
+  if (!featuredEl) return;
   featuredEl.innerHTML = "";
-  featuredConfig.slice(0,3).forEach(cfg => {
+
+  featuredConfig.forEach(cfg => {
     const full = `${cfg.owner}/${cfg.name}`;
     const repo = reposByFullName[full];
-
+    
     const card = document.createElement("div");
     card.className = "featured";
 
     if (repo) {
+      card.innerHTML = createCardHTML(repo, cfg);
+    } else {
+      // Fallback para repo não encontrado
       card.innerHTML = `
-        <h3><a href="${repo.html_url}" target="_blank">${cfg.title || repo.name}</a></h3>
-        <p>${cfg.descriptionOverride ?? repo.description ?? ""}</p>
+        <h3>${cfg.title}</h3>
+        <p>Projeto não encontrado ou privado.</p>
+        <div class="tags" style="margin-top:auto; margin-bottom:16px;">
+            ${(cfg.tags || []).map(t => `<span>${t}</span>`).join('')}
+        </div>
         <div class="meta">
-          ${repo.language ? `<span><span class="lang-dot" style="background:${langColor(repo.language)}"></span>${repo.language}</span>` : ""}
-          <span>★ ${repo.stargazers_count}</span>
-          <span>Última atualização: ${formatDate(repo.updated_at)}</span>
-          ${cfg.demo || repo.homepage ? `<span><a href="${cfg.demo || repo.homepage}" target="_blank">Demo</a></span>` : ""}
+            <a href="https://github.com/${cfg.owner}" target="_blank">Ver GitHub</a>
         </div>
       `;
-    } else {
-      card.innerHTML = `
-        <h3>${cfg.title || cfg.name}</h3>
-        <p>Repositório <code>${full}</code> não encontrado na lista pública deste usuário.</p>
-        <div class="meta"><a href="https://github.com/${full}" target="_blank">Ver no GitHub</a></div>
-      `;
     }
-
     featuredEl.appendChild(card);
   });
 }
 
 function renderRepos(allRepos, featuredNames) {
-  const others = allRepos.filter(r => !featuredNames.has(`${r.owner.login}/${r.name}`));
+  if (!reposEl) return;
+  
+  const others = allRepos.filter(r => 
+    !featuredNames.has(`${r.owner.login}/${r.name}`) && 
+    !r.fork && // Opcional: esconder forks
+    !r.archived // Opcional: esconder arquivados
+  );
+
   if (!others.length) {
-    reposEl.innerHTML = "<p>Nenhum repositório encontrado.</p>";
+    reposEl.innerHTML = "<p>Nenhum outro repositório público encontrado.</p>";
     return;
   }
+
   reposEl.innerHTML = "";
   others.forEach(r => {
     const div = document.createElement("div");
     div.className = "repo";
-    div.innerHTML = `
-      <h3><a href="${r.html_url}" target="_blank">${r.name}</a></h3>
-      <p>${r.description || ""}</p>
-      <div class="meta">
-        ${r.language ? `<span><span class="lang-dot" style="background:${langColor(r.language)}"></span>${r.language}</span>` : ""}
-        <span>★ ${r.stargazers_count}</span>
-        <span>Última atualização: ${formatDate(r.updated_at)}</span>
-        ${r.homepage ? `<span><a href="${r.homepage}" target="_blank">Demo</a></span>` : ""}
-      </div>
-    `;
+    div.innerHTML = createCardHTML(r);
     reposEl.appendChild(div);
   });
 }
 
-(async function init(){
-  try {
-    // Carrega perfil e repos do usuário principal
-    const profile = await fetchProfile();
-    avatarEl.src = profile.avatar_url;
-    nameEl.textContent = profile.name || profile.login;
-    bioEl.textContent = profile.bio || "Portfólio — projetos e repositórios";
-    githubLinkEl.href = profile.html_url;
+async function init() {
+  await fetchProfile();
+  const repos = await fetchRepos();
+  
+  const reposByFullName = {};
+  repos.forEach(r => {
+    reposByFullName[r.full_name] = r;
+  });
 
-    const repos = await fetchRepos();
+  const featuredNames = new Set(featuredConfig.map(c => `${c.owner}/${c.name}`));
 
-    // Organiza repos por "owner/name" para localizar facilmente os destaque
-    const reposByFullName = {};
-    repos.forEach(r => {
-      reposByFullName[`${r.owner.login}/${r.name}`] = r;
-    });
+  renderFeatured(reposByFullName);
+  renderRepos(repos, featuredNames);
+}
 
-    // Para o caso de destaques serem de outros owners, tentamos buscar o repo remoto
-    await Promise.all(featuredConfig.map(async cfg => {
-      const full = `${cfg.owner}/${cfg.name}`;
-      if (!reposByFullName[full]) {
-        try {
-          const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.name}`);
-          if (res.ok) {
-            const r = await res.json();
-            reposByFullName[full] = r;
-          }
-        } catch (e) {
-          // ignora erros individuais
-        }
-      }
-    }));
-
-    renderFeatured(reposByFullName);
-
-    const featuredNames = new Set(featuredConfig.slice(0,3).map(c => `${c.owner}/${c.name}`));
-    renderRepos(repos, featuredNames);
-
-  } catch (err) {
-    reposEl.innerHTML = `<p>Erro: ${err.message}</p>`;
-    console.error(err);
-  }
-})();
+init();

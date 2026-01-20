@@ -1,39 +1,111 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Portfólio — edimar1315</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Portfólio — edimar1315</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header class="site-header container">
-    <img id="avatar" alt="Avatar" />
-    <div class="header-info">
-      <h1 id="name">edimar1315</h1>
-      <p id="bio">Portfólio — projetos e repositórios</p>
-      <nav><a id="github-link" href="#" target="_blank">GitHub</a></nav>
-    </div>
-  </header>
 
-  <main class="container">
-    <section id="featured-section">
-      <h2>Projetos em destaque</h2>
-      <div id="featured" class="featured-grid">
-        <!-- Cards de destaque populados por script.js -->
-      </div>
-    </section>
+    <nav class="container navbar">
+        <div class="logo">edimar1315</div>
+        <div class="links">
+            <a href="#about">Sobre</a>
+            <a href="#projects">Projetos</a>
+            <a href="#contact">Contato</a>
+        </div>
+    </nav>
 
-    <section>
-      <h2>Outros repositórios</h2>
-      <div id="repos" class="repo-grid">Carregando repositórios...</div>
-    </section>
-  </main>
+    <header class="container hero">
+        <div class="hero-content">
+            <p class="greeting">Olá, eu sou Edimar Barbosa</p>
+            <h1 class="role">Engenheiro de Software &<br>Backend Developer .NET</h1>
+            <p class="bio-text">
+                Transformo problemas complexos em soluções robustas e escaláveis.
+                Especialista em arquitetura de software, otimização de performance e integração de sistemas
+                corporativos.
+            </p>
+            <div class="hero-actions">
+                <a href="#projects" class="btn btn-primary">Ver Projetos</a>
+                <a href="#contact" class="btn btn-outline">Entre em contato</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img id="avatar" alt="Avatar Edimar" />
+        </div>
+    </header>
 
-  <footer class="container">
-    <small>Gerado com GitHub Pages • Atualize os destaques em <code>script.js</code></small>
-  </footer>
+    <main class="container">
+        <section id="about" class="section">
+            <h2 class="section-title">Sobre Mim</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                        Engenheiro de Software com <strong>3+ anos</strong> de experiência em desenvolvimento backend
+                        .NET.
+                        Minha jornada é focada em construir sistemas que não apenas funcionam, mas que são fáceis de
+                        manter e evoluir.
+                    </p>
+                    <p>
+                        Tenho experiência sólida em modernização de legado, otimização de bancos de dados SQL Server
+                        (reduzindo latência em até 35%) e arquitetura de APIs REST integradas a ecossistemas complexos.
+                    </p>
+                </div>
+                <div class="skills-container">
+                    <h3>Competências Principais</h3>
+                    <div class="tags">
+                        <span>C#</span>
+                        <span>.NET Core</span>
+                        <span>ASP.NET Web API</span>
+                        <span>SQL Server</span>
+                        <span>Python</span>
+                        <span>Azure DevOps</span>
+                        <span>Clean Architecture</span>
+                        <span>DDD</span>
+                        <span>SOLID</span>
+                        <span>Redis</span>
+                        <span>Git</span>
+                        <span>Docker</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <script src="script.js"></script>
+        <section id="projects" class="section">
+            <h2 class="section-title">Meus Projetos</h2>
+            <p class="section-subtitle">Destaques do meu portfólio e repositórios recentes.</p>
+
+            <div id="featured" class="featured-grid">
+                <!-- Injetado via JS -->
+            </div>
+        </section>
+
+        <section id="repos-section" class="section">
+            <h2 class="section-title">Outros Repositórios</h2>
+            <div id="repos" class="repo-grid">Carregando repositórios...</div>
+        </section>
+
+        <section id="contact" class="section contact-section">
+            <h2 class="section-title">Vamos conversar?</h2>
+            <p>Estou sempre aberto a discutir novos projetos, arquitetura de software ou oportunidades.</p>
+            <div class="social-links">
+                <a href="https://linkedin.com/in/edimarsilva" target="_blank" class="btn btn-outline">LinkedIn</a>
+                <a href="https://github.com/edimar1315" target="_blank" class="btn btn-outline">GitHub</a>
+                <a href="mailto:edimar.silva87@gmail.com" class="btn btn-primary">Enviar Email</a>
+                <a href="https://wa.me/5511965989179?text=Ol%C3%A1%20Edimar%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%21"
+                    target="_blank" class="btn btn-whatsapp">WhatsApp</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container site-footer">
+        <small>© 2025 Edimar Barbosa. Gerado com GitHub Pages.</small>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
