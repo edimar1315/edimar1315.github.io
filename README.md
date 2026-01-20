@@ -23,7 +23,7 @@ Meu foco é **resolver problemas complexos** com código limpo, testável e bem 
 
 ## 💼 Experiência Profissional
 
-### **Evertec Brasil (antiga Sinqia) – Engenheiro de Software** `2024 - 2025`
+### **Evertec Brasil (antiga Sinqia) – Engenheiro de Software** `2025 - 2026`
 - 🔧 Manutenção e evolução de sistemas legados SCAFF e Site Participante em .NET
 - ⚡ Otimização SQL Server com **35% de redução de latência** em queries críticas
 - 🐛 Troubleshooting e correção de bugs em ambiente previdenciário
