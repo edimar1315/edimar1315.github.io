@@ -47,7 +47,15 @@ function getLangColor(name) {
 async function fetchProfile() {
   try {
     const res = await fetch(`https://api.github.com/users/${username}`);
-    if (!res.ok) throw new Error("Erro ao carregar perfil");
+
+    // Rate Limit Check
+    if (res.status === 403) {
+      console.error("GitHub API Rate Limit excedido. Tente novamente mais tarde.");
+      return;
+    }
+
+    if (!res.ok) throw new Error(`Erro ao carregar perfil: ${res.status}`);
+
     const data = await res.json();
 
     if (avatarEl) {
@@ -61,7 +69,13 @@ async function fetchProfile() {
 async function fetchRepos() {
   try {
     const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
-    if (!res.ok) throw new Error("Erro ao carregar repositórios");
+
+    if (res.status === 403) {
+      console.error("GitHub API Rate Limit excedido.");
+      return [];
+    }
+
+    if (!res.ok) throw new Error(`Erro ao carregar repositórios: ${res.status}`);
     return await res.json();
   } catch (err) {
     console.error(err);
