@@ -1,20 +1,20 @@
 // Configuração: destaques definidos conforme sua lista.
 const featuredConfig = [
-  { 
-    owner: "edimar1315", 
-    name: "NossoSorteio", 
-    title: "NossoSorteio",
+  {
+    owner: "edimar1315",
+    name: "SalesWebMvc",
+    title: "SalesWebMvc",
     tags: ["C#", ".NET", "SQL Server"]
   },
-  { 
-    owner: "edimar1315", 
-    name: "HospitalApp", 
+  {
+    owner: "edimar1315",
+    name: "HospitalApp",
     title: "HospitalApp",
     tags: ["ASP.NET Core", "Entity Framework"]
   },
-  { 
-    owner: "edimar1315", 
-    name: "APIIntegracaoReceita", 
+  {
+    owner: "edimar1315",
+    name: "APIIntegracaoReceita",
     title: "API Receita Federal",
     tags: ["API REST", "Python", "Automation"]
   },
@@ -49,7 +49,7 @@ async function fetchProfile() {
     const res = await fetch(`https://api.github.com/users/${username}`);
     if (!res.ok) throw new Error("Erro ao carregar perfil");
     const data = await res.json();
-    
+
     if (avatarEl) {
       avatarEl.src = data.avatar_url;
     }
@@ -80,8 +80,8 @@ function createCardHTML(repo, config = {}) {
   const url = repo.html_url;
   const stars = repo.stargazers_count;
   const lang = repo.language;
-  
-  // Tags: Use config tags if available, otherwise just the main language
+
+
   let tagsHTML = '';
   if (config.tags && config.tags.length) {
     tagsHTML = `<div class="tags" style="margin-top:auto; margin-bottom:16px;">
@@ -108,7 +108,7 @@ function renderFeatured(reposByFullName) {
   featuredConfig.forEach(cfg => {
     const full = `${cfg.owner}/${cfg.name}`;
     const repo = reposByFullName[full];
-    
+
     const card = document.createElement("div");
     card.className = "featured";
 
@@ -133,9 +133,9 @@ function renderFeatured(reposByFullName) {
 
 function renderRepos(allRepos, featuredNames) {
   if (!reposEl) return;
-  
-  const others = allRepos.filter(r => 
-    !featuredNames.has(`${r.owner.login}/${r.name}`) && 
+
+  const others = allRepos.filter(r =>
+    !featuredNames.has(`${r.owner.login}/${r.name}`) &&
     !r.fork && // Opcional: esconder forks
     !r.archived // Opcional: esconder arquivados
   );
@@ -157,7 +157,7 @@ function renderRepos(allRepos, featuredNames) {
 async function init() {
   await fetchProfile();
   const repos = await fetchRepos();
-  
+
   const reposByFullName = {};
   repos.forEach(r => {
     reposByFullName[r.full_name] = r;
